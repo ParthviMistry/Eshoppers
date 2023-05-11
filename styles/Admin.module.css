@@ -1,0 +1,32 @@
+.heading {
+  text-align: center;
+  justify-content: center;
+}
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.form_Container .card {
+  min-width: 450px;
+}
+.form_Container .card form {
+  margin-top: 2rem;
+}
+.form_Container .card .field {
+  margin-bottom: 1.5rem;
+}
+@media screen and (max-width: 960px) {
+  .form_Container .card {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 640px) {
+  .form_Container .card {
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -1,0 +1,14 @@
+
+import React from 'react'
+
+export default function caret() {
+    return (
+        <div>
+            <svg width="8" height="4" viewBox="0 0 8 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.20711 0C0.761654 0 0.538571 0.538571 0.853553 0.853553L3.64645 3.64645C3.84171 3.84171 4.15829 3.84171 4.35355 3.64645L7.14645 0.853553C7.46143 0.53857 7.23835 0 6.79289 0L1.20711 0Z" fill="black" fillOpacity="0.82"/>
+            </svg>
+            
+        </div>
+    )
+}
+
