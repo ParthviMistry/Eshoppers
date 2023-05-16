@@ -24,11 +24,6 @@ export default function Admin() {
     fetchData();
   }, []);
 
-  async function fetchData() {
-    const { data } = await axios.get("api/products");
-    setProducts(data);
-  }
-
   useEffect(() => {
     if (editForm) {
       const currProduct = products.find((product) => product.id === editForm);
@@ -36,34 +31,17 @@ export default function Admin() {
     }
   }, [editForm]);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const fetchData = async () => {
+    const { data } = await axios.get("api/products");
+    setProducts(data);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let url = "api/products/form-submit";
-    let headers = { "content-type": "application/json" };
-    let response = await axios.post(url, formData, headers);
-    clearAndReload();
-  };
-
-  const deleteProduct = async (id) => {
-    let url = `api/products/form-submit?id=${id}`;
-    let headers = { "content-type": "application/json" };
-    let response = await axios.delete(url, { id }, headers);
-    clearAndReload();
-  };
-
-  function clearAndReload() {
+  const clearAndReload = () => {
     setEditForm(false);
     setItemForm(false);
     setFormData({});
     fetchData();
-  }
+  };
 
   const show = (position) => {
     setPosition(position);
@@ -71,9 +49,20 @@ export default function Admin() {
     setItemForm(!itemForm);
   };
 
+  const handleSearch = async (query) => {
+    let url = `api/products/form-submit?name=${query}`;
+    let headers = { "content-type": "application/json" };
+
+    const response = await axios.get(url, { query }, headers);
+    if (response.status == 200) {
+      setProducts([response.data.data]);
+    }
+    if (!query) fetchData();
+  };
+
   return (
     <>
-      <NavigationHeader />
+      <NavigationHeader handleSearch={handleSearch} />
       <div className=" ">
         <h1 className={styles.heading}>Eshoppers Admin</h1>
 
@@ -83,9 +72,6 @@ export default function Admin() {
             visible={visible}
             position={position}
             setVisible={setVisible}
-            editForm={editForm}
-            setEditForm={setEditForm}
-            isNew={true}
           />
         )}
 

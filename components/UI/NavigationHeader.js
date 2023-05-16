@@ -34,21 +34,19 @@ import { MegaMenu } from "primereact/megamenu";
 import { InputText } from "primereact/inputtext";
 
 import CheckoutCart from "../Icons/CheckoutCart";
+import axios from "axios";
 
-export default function NavigationHeader({ setOpenCart, openCart, showBadge }) {
+export default function NavigationHeader({
+  setOpenCart,
+  openCart,
+  showBadge,
+  handleSearch,
+}) {
   const items = [
-    {
-      label: "Home",
-    },
-    {
-      label: "Products",
-    },
-    {
-      label: "My Profile",
-    },
-    {
-      label: "Settings",
-    },
+    { label: "Home" },
+    { label: "Products" },
+    { label: "My Profile" },
+    { label: "Settings" },
   ];
 
   const start = (
@@ -61,7 +59,11 @@ export default function NavigationHeader({ setOpenCart, openCart, showBadge }) {
 
   const end = (
     <div className="cart_container">
-      <InputText placeholder="Search" type="text" />
+      <InputText
+        placeholder="Search"
+        type="text"
+        onChange={(e) => handleSearch(e.target.value)}
+      />
       <div
         className="cart_icon"
         style={{ width: "40px", cursor: "pointer" }}

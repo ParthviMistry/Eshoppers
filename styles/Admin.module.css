@@ -16,8 +16,11 @@
 .form_Container .card form {
   margin-top: 2rem;
 }
-.form_Container .card .field {
-  margin-bottom: 1.5rem;
+.field {
+  margin-bottom: 2rem;
+}
+.chechoutLabel {
+  padding-left: 10px;
 }
 @media screen and (max-width: 960px) {
   .form_Container .card {

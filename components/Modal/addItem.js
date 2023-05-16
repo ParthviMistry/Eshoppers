@@ -6,10 +6,17 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
+import { InputNumber } from "primereact/inputnumber";
 
 import styles from "@/styles/Admin.module.css";
 
-export default function AddItem({ visible, position, setVisible }) {
+export default function AddItem({
+  visible,
+  position,
+  setVisible,
+  cart,
+  editData,
+}) {
   const [formData, setFormData] = useState({});
   const [showMessage, setShowMessage] = useState({});
 
@@ -18,6 +25,7 @@ export default function AddItem({ visible, position, setVisible }) {
       name: "",
       sku: "",
       text: "",
+      price: "",
       description: "",
       accept: false,
     },
@@ -28,18 +36,24 @@ export default function AddItem({ visible, position, setVisible }) {
       if (!data.sku) errors.sku = "sku is required.";
       if (!data.text) errors.text = "text is required.";
       if (!data.description) errors.description = "Description is required.";
+      if (!data.price) errors.price = "Price is required.";
 
       return errors;
     },
     onSubmit: async (data) => {
       let url = "api/products/form-submit";
       let headers = { "content-type": "application/json" };
-      const response = await axios.post(url, data, headers);
+      const response = await axios.post(
+        url,
+        editData ? { ...data, id: editData.id } : data,
+        headers
+      );
       if (response.status == 200) {
         setFormData(data);
+        setShowMessage(true);
+        setVisible(false);
+        formik.resetForm();
       }
-      setShowMessage(true);
-      formik.resetForm();
     },
   });
 
@@ -57,7 +71,7 @@ export default function AddItem({ visible, position, setVisible }) {
   return (
     <div className={styles.form_Container}>
       <Dialog
-        header="Add Products"
+        header={editData ? "Edit Product" : "Add Product"}
         visible={visible}
         position={position}
         style={{ width: "50vw" }}
@@ -73,7 +87,7 @@ export default function AddItem({ visible, position, setVisible }) {
                   <InputText
                     id="name"
                     name="name"
-                    value={formik.values.name}
+                    value={formik.values.name || editData.name}
                     onChange={formik.handleChange}
                     autoFocus
                   />
@@ -87,7 +101,7 @@ export default function AddItem({ visible, position, setVisible }) {
                   <InputText
                     id="sku"
                     name="sku"
-                    value={formik.values.sku}
+                    value={formik.values.sku || editData.sku}
                     onChange={formik.handleChange}
                   />
                   <label htmlFor="sku">sku*</label>
@@ -99,7 +113,7 @@ export default function AddItem({ visible, position, setVisible }) {
                   <InputText
                     id="text"
                     name="text"
-                    value={formik.values.text}
+                    value={formik.values.text || editData.text}
                     onChange={formik.handleChange}
                   />
                   <label htmlFor="name">Text*</label>
@@ -111,22 +125,37 @@ export default function AddItem({ visible, position, setVisible }) {
                   <InputText
                     id="description"
                     name="description"
-                    value={formik.values.description}
+                    value={formik.values.description || editData.description}
                     onChange={formik.handleChange}
                   />
                   <label htmlFor="name">Description*</label>
                 </span>
                 {getFormErrorMessage("description")}
               </div>
-
-              <div className="field-checkbox">
+              <div className={styles.field}>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="price"
+                    name="price"
+                    value={formik.values.price || editData.price}
+                    onValueChange={formik.handleChange}
+                    mode="currency"
+                    currency="INR"
+                    currencyDisplay="code"
+                    locale="en-IN"
+                  />
+                  <label htmlFor="name">Price*</label>
+                </span>
+                {getFormErrorMessage("description")}
+              </div>
+              <div className={styles.field}>
                 <Checkbox
                   inputId="accept"
                   name="accept"
-                  checked={formik.values.accept}
+                  checked={formik.values.accept || editData.available}
                   onChange={formik.handleChange}
                 />
-                <label htmlFor="accept">
+                <label htmlFor="accept" className={styles.chechoutLabel}>
                   I agree to the terms and conditions*
                 </label>
               </div>
